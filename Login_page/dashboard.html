@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - AEC Library</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+</head>
+<body>
+  <h1>Welcome to your Dashboard</h1>
+  <p id="welcomeMessage">Loading user info...</p>
+  <button id="logoutBtn">Log Out</button>
+
+  <script>
+    const supabaseUrl = `https://cvhyilfsattdglfdmvcu.supabase.co`;
+    const supabaseAnonKey = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2aHlpbGZzYXR0ZGdsZmRtdmN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDQ1NTE5MTksImV4cCI6MTk2MDEyNzkxOX0.wvKZxYcBbeUy9aJTw3XzbySmBJ8PkxVGXeopoucQpGY`;
+
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    async function loadUser() {
+      const user = supabase.auth.user();
+      if (user) {
+        document.getElementById('welcomeMessage').textContent = `Hello, ${user.user_metadata.first_name || user.email}!`;
+      } else {
+        window.location.replace("login_page.html");
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.replace("login_page.html");
+    });
+
+    loadUser();
+  </script>
+</body>
+</html>
